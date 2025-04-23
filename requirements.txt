@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+motor
+pydantic
+python-dotenv
+
+langchain
+langchain-google-generative-ai
+langchain-core
+
+openai
+faiss-cpu
+
+langgraph

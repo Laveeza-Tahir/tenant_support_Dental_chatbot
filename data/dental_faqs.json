@@ -1,0 +1,17 @@
+[
+    {
+        "question": "What is dental hygiene?",
+        "answer": "Dental hygiene is the practice of keeping your teeth and mouth clean to prevent dental problems.",
+        "source": "dental_faqs.json"
+    },
+    {
+        "question": "What is a root canal?",
+        "answer": "A root canal is a dental procedure used to treat infection in the roots of a tooth.",
+        "source": "dental_faqs.json"
+    },
+    {
+        "question": "How often should I visit the dentist?",
+        "answer": "It is recommended to visit the dentist every six months for a check-up and cleaning.",
+        "source": "dental_faqs.json"
+    }
+]
