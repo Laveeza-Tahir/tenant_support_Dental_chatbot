@@ -1,7 +1,6 @@
 import os
 import requests
 from config.prompts import APPOINTMENT_PROMPT
-
 # Load API key from environment variable
 CALENDLY_API_KEY = "eyJraWQiOiIxY2UxZTEzNjE3ZGNmNzY2YjNjZWJjY2Y4ZGM1YmFmYThhNjVlNjg0MDIzZjdjMzJiZTgzNDliMjM4MDEzNWI0IiwidHlwIjoiUEFUIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiJodHRwczovL2F1dGguY2FsZW5kbHkuY29tIiwiaWF0IjoxNzQ1MzA1MTAyLCJqdGkiOiI4YzdjOTEwZC01NzcxLTQ3NGYtYWEwZi04Mjk0NmIyZjFjYjUiLCJ1c2VyX3V1aWQiOiI0YjZmNTdiYy01MTdlLTQzZTEtYjYwZi1jODNlZmUxNGJjYTIifQ.MuZAvmKVEZ-x3w8WjwAYC3X2-Z0kgXB3SONPOTgI07vjdI_3tp_ho2Cu3pk0HkOnsfmMLmaTaLVvyHTqCL1epQ"
 
@@ -53,13 +52,13 @@ class AppointmentNode:
     async def __call__(self, state):
         user_msg = state.get("user_message", "").lower()
 
-        if any(keyword in user_msg for keyword in ["book", "appointment", "schedule"]):
+        if any(keyword in user_msg for keyword in ["book", "appointment", "schedule", "visit", "dentist", "checkup"]):
             calendly_link = get_calendly_link()
             if calendly_link:
                 state["final_response"] = (
-                    "✅ You're all set to book an appointment!\n\n"
-                    f"👉 [Click here to schedule a time]({calendly_link})\n\n"
-                    "📩 After booking, you'll automatically receive a confirmation email from Calendly."
+                    " You're all set to book an appointment!"
+                    f" Click here to schedule a time({calendly_link})"
+                    " After booking, you'll automatically receive a confirmation email from Calendly."
                 )
             else:
                 state["final_response"] = (
@@ -68,5 +67,5 @@ class AppointmentNode:
                 )
         else:
             state["final_response"] = APPOINTMENT_PROMPT.strip()
-
+            
         return state
