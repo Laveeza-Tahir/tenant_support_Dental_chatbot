@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 from app.core.workflows.main_workflow import DentalWorkflow
-
+import re
 router = APIRouter()
 
 class ChatRequest(BaseModel):
@@ -15,4 +15,10 @@ class ChatResponse(BaseModel):
 @router.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest):
     wf = DentalWorkflow()
-    return await wf.run(req.session_id, req.message)
+    result = await wf.run(req.session_id, req.message)
+
+    # Remove all occurrences of [Source: ...]
+    cleaned_response = re.sub(r"\[Source(?:\:.*?)?\]", "", result['response']).strip()
+
+
+    return ChatResponse(response=cleaned_response, sources=result['sources'])
