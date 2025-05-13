@@ -1,5 +1,20 @@
+# Ignore compiled Python files
 __pycache__/
 *.pyc
+
+# Ignore FAISS index files
 faiss_index/
 data/faiss_index/
+
+# Ignore environment files
 .env
+
+# Ignore ChromaDB directories
+data/chroma_db/
+
+# Ignore uploaded files
+data/uploads/
+
+# Ignore token and credentials files
+token.pkl
+credentials.json
