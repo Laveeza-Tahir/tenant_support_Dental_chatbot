@@ -1,71 +1,175 @@
-import os
-import requests
-from config.prompts import APPOINTMENT_PROMPT
-# Load API key from environment variable
-CALENDLY_API_KEY = "eyJraWQiOiIxY2UxZTEzNjE3ZGNmNzY2YjNjZWJjY2Y4ZGM1YmFmYThhNjVlNjg0MDIzZjdjMzJiZTgzNDliMjM4MDEzNWI0IiwidHlwIjoiUEFUIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiJodHRwczovL2F1dGguY2FsZW5kbHkuY29tIiwiaWF0IjoxNzQ1MzA1MTAyLCJqdGkiOiI4YzdjOTEwZC01NzcxLTQ3NGYtYWEwZi04Mjk0NmIyZjFjYjUiLCJ1c2VyX3V1aWQiOiI0YjZmNTdiYy01MTdlLTQzZTEtYjYwZi1jODNlZmUxNGJjYTIifQ.MuZAvmKVEZ-x3w8WjwAYC3X2-Z0kgXB3SONPOTgI07vjdI_3tp_ho2Cu3pk0HkOnsfmMLmaTaLVvyHTqCL1epQ"
+# from app.core.workflows.utils.calendar_helper import create_calendar_event
 
-HEADERS = {
-    "Authorization": f"Bearer {CALENDLY_API_KEY}",
-    "Content-Type": "application/json",
-}
+# class AppointmentNode:
+#     async def __call__(self, state):
+#         user_message = state.get("user_message", "").lower()
 
-def get_calendly_user_uri():
-    """
-    Fetch the current user's URI (needed to query event types).
-    """
-    resp = requests.get("https://api.calendly.com/users/me", headers=HEADERS)
-    if resp.status_code != 200:
-        print(f"[Calendly] /users/me failed: {resp.status_code} {resp.text}")
-        return None
-    return resp.json().get("resource", {}).get("uri")
+#         patient_name = state.get("patient_name")
+#         appointment_date = state.get("appointment_date")
+#         appointment_time = state.get("appointment_time")
 
+#         # Check which information is missing
+#         if not patient_name:
+#             state["final_response"] = "👤 What's your full name?"
+#             state["awaiting"] = "patient_name"
+#             return state
 
-def get_calendly_link():
-    """
-    Fetch the first event type's scheduling link using the authenticated user's URI.
-    """
-    user_uri = get_calendly_user_uri()
-    if not user_uri:
-        return None
+#         if not appointment_date:
+#             state["final_response"] = "📅 What date would you like to book? (e.g., 2025-05-05)"
+#             state["awaiting"] = "appointment_date"
+#             return state
 
-    url = f"https://api.calendly.com/event_types?user={user_uri}"
-    resp = requests.get(url, headers=HEADERS)
-    print(f"[DEBUG] GET {url} → {resp.status_code}")
+#         if not appointment_time:
+#             state["final_response"] = "⏰ What time would you prefer? (e.g., 3 PM)"
+#             state["awaiting"] = "appointment_time"
+#             return state
 
-    if resp.status_code != 200:
-        print(f"[ERROR] Calendly API response: {resp.text}")
-        return None
+#         # All information collected → Book the appointment
+#         try:
+#             event_link = create_calendar_event(patient_name, appointment_date, appointment_time)
+#             state["final_response"] = f"✅ Your appointment is booked successfully!\n\n🔗 Here is your appointment link: {event_link}"
+#             state["intent"] = "appointment_completed"
 
-    items = resp.json().get("collection", [])
-    if not items:
-        print("[DEBUG] No event types found in Calendly response.")
-        return None
+#             # Clear temporary memory
+#             state.pop("patient_name", None)
+#             state.pop("appointment_date", None)
+#             state.pop("appointment_time", None)
+#             state.pop("awaiting", None)
 
-    return items[0].get("scheduling_url")
+#         except Exception as e:
+#             state["final_response"] = f"❌ Failed to book appointment: {str(e)}"
 
+#         return state
+# Path: app/core/workflows/nodes/appointment.py
+
+import re
+import logging
+import datetime as dt
+from app.core.workflows.utils.calendar_helper import create_calendar_event
 
 class AppointmentNode:
-    """
-    Responds to booking intent by returning a Calendly scheduling link.
-    """
-
     async def __call__(self, state):
-        user_msg = state.get("user_message", "").lower()
+        user_message = state.get("user_message", "").lower().strip()
+        
+        # For debugging
+        logging.info(f"AppointmentNode called with state: {state}")
+        
+        # Directly detect if this is a new appointment request after a previous one
+        if user_message in ["book appointment", "schedule appointment", "new appointment"] and not state.get("awaiting"):
+            # Clear any existing appointment data to start fresh
+            for key in ["patient_name", "appointment_date", "appointment_time"]:
+                state.pop(key, None)
+            state["final_response"] = "👤 What's your full name?"
+            state["awaiting"] = "patient_name"
+            return state
 
-        if any(keyword in user_msg for keyword in ["book", "appointment", "schedule", "visit", "dentist", "checkup"]):
-            calendly_link = get_calendly_link()
-            if calendly_link:
-                state["final_response"] = (
-                    " You're all set to book an appointment!"
-                    f" Click here to schedule a time({calendly_link})"
-                    " After booking, you'll automatically receive a confirmation email from Calendly."
-                )
-            else:
-                state["final_response"] = (
-                    "❌ Sorry, I couldn't fetch your scheduling link right now. "
-                    "Please try again later."
-                )
-        else:
-            state["final_response"] = APPOINTMENT_PROMPT.strip()
+        patient_name = state.get("patient_name")
+        appointment_date = state.get("appointment_date")
+        appointment_time = state.get("appointment_time")
+
+        # Check if user message contains a common time format
+        # This helps when the user repeats the time because the system didn't understand
+        time_patterns = [
+            r'\b\d{1,2}\s*(?:am|pm|a\.m\.|p\.m\.)\b',   # 3pm, 11am
+            r'\b\d{1,2}:\d{2}\s*(?:am|pm|a\.m\.|p\.m\.)\b',  # 3:30pm
+            r'\b(?:morning|afternoon|evening|noon)\b'    # natural time expressions
+        ]
+        
+        is_time_input = any(re.search(pattern, user_message, re.IGNORECASE) for pattern in time_patterns)
+        
+        # Handle the case where user repeats time input
+        if is_time_input and state.get("awaiting") != "appointment_time":
+            # User is trying to provide time even though we didn't ask for it
+            appointment_time = user_message
+            state["appointment_time"] = user_message
+            logging.info(f"Detected time input outside of time question flow: {appointment_time}")
+
+        # Handle natural language responses for dates and times
+        if user_message in ["today", "now", "asap"]:
+            # Use today's date if user says "today" or "now"
+            today = dt.datetime.now().strftime("%Y-%m-%d")
+            if state.get("awaiting") == "appointment_date":
+                appointment_date = today
+                state["appointment_date"] = today
+                state["awaiting"] = None
+                state["final_response"] = "⏰ What time would you prefer? (e.g., 3 PM, afternoon, evening)"
+                return state
+
+        # Special case for "tomorrow"
+        if user_message == "tomorrow" and state.get("awaiting") == "appointment_date":
+            tomorrow = (dt.datetime.now() + dt.timedelta(days=1)).strftime("%Y-%m-%d")
+            appointment_date = tomorrow
+            state["appointment_date"] = tomorrow
+            state["awaiting"] = None
+            state["final_response"] = "⏰ What time would you prefer? (e.g., 3 PM, afternoon, evening)"
+            return state
+
+        # Check which information is missing
+        if not patient_name:
+            state["final_response"] = "👤 What's your full name?"
+            state["awaiting"] = "patient_name"
+            return state
+
+        if not appointment_date:
+            state["final_response"] = "📅 What date would you like to book? (e.g., today, tomorrow, 2025-05-05)"
+            state["awaiting"] = "appointment_date"
+            return state
+
+        if not appointment_time:
+            state["final_response"] = "⏰ What time would you prefer? (e.g., morning, afternoon, 3 PM)"
+            state["awaiting"] = "appointment_time"
+            return state
+
+        # All information collected - process appointment
+        try:
+            # Additional validation before booking
+            if not appointment_date or appointment_date.strip() == '':
+                # Default to today if date is empty
+                appointment_date = dt.datetime.now().strftime("%Y-%m-%d")
+                state["appointment_date"] = appointment_date
+                logging.warning(f"Empty appointment date, defaulting to today: {appointment_date}")
             
+            if not appointment_time or appointment_time.strip() == '':
+                # Default to afternoon if time is empty
+                appointment_time = "2 PM"
+                state["appointment_time"] = appointment_time
+                logging.warning(f"Empty appointment time, defaulting to: {appointment_time}")
+                
+            # Log the appointment details for debugging
+            logging.info(f"Booking appointment for {patient_name} on {appointment_date} at {appointment_time}")
+            
+            # Create a calendar event using the collected information
+            event_link = create_calendar_event(patient_name, appointment_date, appointment_time)
+
+            # Build a friendly confirmation message
+            confirmation = f"✅ Perfect! Your appointment is booked successfully!\n\n"
+            confirmation += f"📋 Details:\n"
+            confirmation += f"👤 Name: {patient_name}\n"
+            confirmation += f"📅 Date: {appointment_date}\n"
+            confirmation += f"⏰ Time: {appointment_time}\n\n"
+            confirmation += f"🔗 Here is your appointment link: {event_link}\n\n"
+            confirmation += f"You'll receive a reminder before your appointment. Is there anything else I can help you with?"
+
+            # Success: Appointment booked
+            state["final_response"] = confirmation
+
+            # Mark the appointment as completed and clear ALL appointment state
+            state["intent"] = "appointment_completed"
+            state["appointment_status"] = "booked"
+            state.pop("pending_intent", None)  # Explicitly clear pending intent
+            
+            # Clear ALL temporary memory related to the appointment process
+            for key in list(state.keys()):
+                if key.startswith("appointment_") or key in ["patient_name", "awaiting"]:
+                    state.pop(key, None)
+
+            # Set a flag indicating the appointment was just booked
+            state["just_booked"] = True
+
+        except Exception as e:
+            # Handle any error during the booking process
+            error_msg = str(e)
+            logging.error(f"Failed to book appointment: {error_msg}")
+            state["final_response"] = f"❌ Sorry, I couldn't book your appointment: {error_msg}. Would you like to try again with a different time?"
+        
         return state

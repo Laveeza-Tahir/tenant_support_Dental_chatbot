@@ -3,12 +3,27 @@ uvicorn
 motor
 pydantic
 python-dotenv
+python-multipart
+pymupdf
+docx2txt
+python-jose[cryptography]
+passlib[bcrypt]
 
+# Core LangChain components
 langchain
 langchain-google-generative-ai
 langchain-core
+langchain-community
 
-openai
+# Vector stores and text processing
+chromadb
+langchain-chroma
+langchain-text-splitters
+sentence-transformers
 faiss-cpu
 
+# LLM providers
+openai
+
+# Workflow management
 langgraph

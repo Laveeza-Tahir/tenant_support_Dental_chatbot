@@ -1,17 +1,102 @@
 [
     {
         "question": "What is dental hygiene?",
-        "answer": "Dental hygiene is the practice of keeping your teeth and mouth clean to prevent dental problems.",
-        "source": "dental_faqs.json"
+        "answer": "Dental hygiene is the practice of keeping your teeth and mouth clean to prevent dental problems. This includes regular brushing (twice daily), flossing daily, using mouthwash, and attending regular dental check-ups.",
+        "source": "American Dental Association"
     },
     {
         "question": "What is a root canal?",
-        "answer": "A root canal is a dental procedure used to treat infection in the roots of a tooth.",
-        "source": "dental_faqs.json"
+        "answer": "A root canal is a dental procedure used to treat infection at the center of a tooth. The treatment involves removing infected pulp, cleaning the inside of the tooth, and sealing it to prevent further infection.",
+        "source": "Journal of Endodontics"
     },
     {
         "question": "How often should I visit the dentist?",
-        "answer": "It is recommended to visit the dentist every six months for a check-up and cleaning.",
-        "source": "dental_faqs.json"
+        "answer": "It is recommended to visit the dentist every six months for a check-up and professional cleaning. Some patients with specific dental conditions may need more frequent visits as advised by their dentist.",
+        "source": "American Dental Association"
+    },
+    {
+        "question": "What causes tooth decay?",
+        "answer": "Tooth decay is caused by plaque, a sticky film of bacteria that forms on teeth. When you consume sugary foods, the bacteria produce acids that attack tooth enamel, eventually forming cavities if not properly cleaned.",
+        "source": "National Institute of Dental Research"
+    },
+    {
+        "question": "How should I properly brush my teeth?",
+        "answer": "Brush your teeth for two minutes, twice daily, using a soft-bristled toothbrush. Hold your brush at a 45-degree angle to your gums and use gentle, circular motions to clean all tooth surfaces.",
+        "source": "British Dental Journal"
+    },
+    {
+        "question": "What is gum disease?",
+        "answer": "Gum disease (periodontal disease) is an infection of the tissues that hold teeth in place, caused by poor brushing and flossing habits. Symptoms include red, swollen gums that bleed easily, persistent bad breath, and loose teeth.",
+        "source": "American Academy of Periodontology"
+    },
+    {
+        "question": "How can I prevent bad breath?",
+        "answer": "Prevent bad breath by brushing twice daily, flossing daily, cleaning your tongue, staying hydrated, avoiding tobacco products, and visiting your dentist regularly. Persistent bad breath may indicate an underlying dental or medical condition.",
+        "source": "Journal of Clinical Dentistry"
+    },
+    {
+        "question": "What are dental implants?",
+        "answer": "Dental implants are titanium posts surgically placed into the jawbone beneath the gums to replace missing tooth roots. Once in place, they allow your dentist to mount replacement teeth onto them, providing a permanent solution for missing teeth.",
+        "source": "International Journal of Oral & Maxillofacial Implants"
+    },
+    {
+        "question": "Is teeth whitening safe?",
+        "answer": "Professional teeth whitening supervised by a dentist is generally safe. Over-the-counter products are also safe when used as directed, but may cause temporary tooth sensitivity or gum irritation. Consult your dentist before beginning any whitening treatment.",
+        "source": "Journal of the American Dental Association"
+    },
+    {
+        "question": "What should I do in a dental emergency?",
+        "answer": "For a knocked-out tooth, hold it by the crown, rinse gently, and try to reinsert it or keep it in milk. For severe pain, cracked teeth, or swelling, rinse with warm water and apply cold compresses while seeking immediate dental attention.",
+        "source": "American Association of Endodontists"
+    },
+    {
+        "question": "Are dental X-rays safe?",
+        "answer": "Dental X-rays are safe and expose patients to minimal radiation, especially with digital X-rays which use up to 90% less radiation than traditional film. Protective equipment further minimizes exposure, making the benefits far outweigh any risks.",
+        "source": "Oral Radiology"
+    },
+    {
+        "question": "How can I help my child develop good dental habits?",
+        "answer": "Help children develop good dental habits by starting oral care early, making brushing fun, leading by example, limiting sugary foods, scheduling regular dental visits from age 1, and using positive reinforcement for good oral hygiene behaviors.",
+        "source": "American Academy of Pediatric Dentistry"
+    },
+    {
+        "question": "What causes tooth sensitivity?",
+        "answer": "Tooth sensitivity often occurs when tooth enamel wears down or gums recede, exposing the dentin layer with nerve endings. Common causes include brushing too hard, acidic foods, teeth grinding, and certain dental procedures.",
+        "source": "British Dental Journal"
+    },
+    {
+        "question": "How do dental sealants work?",
+        "answer": "Dental sealants are thin, protective coatings painted onto the chewing surfaces of back teeth (molars) to prevent tooth decay. They seal off grooves where food particles and bacteria can get trapped, providing a smooth, easy-to-clean surface.",
+        "source": "Centers for Disease Control and Prevention"
+    },
+    {
+        "question": "What is dental plaque?",
+        "answer": "Dental plaque is a sticky, colorless film of bacteria that constantly forms on teeth. Without proper removal through brushing and flossing, plaque can harden into tartar, leading to gum disease and tooth decay.",
+        "source": "Journal of Dental Research"
+    },
+    {
+        "question": "Are electric toothbrushes better than manual ones?",
+        "answer": "Electric toothbrushes can be more effective at removing plaque and reducing gingivitis compared to manual brushes. They're particularly helpful for people with limited dexterity, but proper brushing technique matters more than the type of brush used.",
+        "source": "Cochrane Oral Health Group"
+    },
+    {
+        "question": "What are wisdom teeth and why are they often removed?",
+        "answer": "Wisdom teeth are the third set of molars that typically emerge between ages 17-25. They're often removed due to lack of space in the jaw, causing them to emerge improperly (impacted), potentially leading to pain, infection, and damage to adjacent teeth.",
+        "source": "Oral Surgery, Oral Medicine, Oral Pathology"
+    },
+    {
+        "question": "How does diet affect dental health?",
+        "answer": "Diet significantly affects dental health as sugary, acidic foods contribute to tooth decay and enamel erosion. A balanced diet rich in calcium, phosphorus, vitamin D, and fibrous fruits and vegetables promotes strong teeth and healthy gums.",
+        "source": "International Journal of Food Sciences and Nutrition"
+    },
+    {
+        "question": "What is fluoride and why is it important?",
+        "answer": "Fluoride is a natural mineral that strengthens tooth enamel and helps prevent cavities. It works by remineralizing weakened enamel and disrupting acid production by bacteria. It's found in many toothpastes, some mouthwashes, and often in community water supplies.",
+        "source": "World Health Organization"
+    },
+    {
+        "question": "Can gum disease affect overall health?",
+        "answer": "Yes, gum disease has been linked to several systemic health conditions including heart disease, diabetes, respiratory diseases, and pregnancy complications. The bacteria from infected gums can enter the bloodstream, potentially affecting other parts of the body.",
+        "source": "Journal of Periodontology"
     }
 ]
