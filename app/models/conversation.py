@@ -82,9 +82,3 @@ class GuestChatRequest(BaseModel):
     # bot_id: str
     # tenant_id: str
     message: str
-    
-class GuestChatResponse(BaseModel):
-    conversation_id: str
-    response: str
-    sources: List[str] = []
-    session_data: Dict[str, Any] = {}

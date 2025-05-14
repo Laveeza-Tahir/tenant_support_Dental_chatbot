@@ -5,7 +5,7 @@ import logging
 
 from app.models.tenant import TenantCreate, TenantResponse, TenantUpdate
 from app.models.bot import BotCreate, BotResponse, BotUpdate
-from app.models.conversation import ChatRequest, ChatResponse, GuestChatRequest, GuestChatResponse
+from app.models.conversation import ChatRequest, ChatResponse, GuestChatRequest
 from app.models.file import FileResponse
 from app.services.tenant_service import TenantService
 from app.services.bot_service import BotService
@@ -108,7 +108,7 @@ async def list_files(tenant_id: str, skip: int = 0, limit: int = 100):
 # Chat routes
 # -------------------------------------------------------------------
 
-@router.post("/chat", response_model=GuestChatResponse)
+@router.post("/chat", response_model=ChatResponse)
 async def chat(req: GuestChatRequest):
     """Chat endpoint accepting only conversation_id, bot_id, tenant_id, and message."""
     wf = DentalWorkflow()
