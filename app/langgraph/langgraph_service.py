@@ -7,12 +7,17 @@ from langgraph.graph import StateGraph, END
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, BaseMessage  # Added BaseMessage
 from langchain_core.documents import Document  # Added Document
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
+
 
 from app.vector_store.vector_db_service import VectorDBService
 from app.models.conversation import MessageSender, ConversationInDB
 from config.settings import settings
+
+from ..core.workflows.nodes.input_processor import input_processor
+from ..core.workflows.nodes.llm_response import llm_response
+from ..core.workflows.nodes.output_response import output_processor
+from ..core.workflows.nodes.retrieval import retrieval
+
 
 # Define the state schema for the graph
 class GraphState(TypedDict):
@@ -62,10 +67,10 @@ class LangGraphService:
         workflow = StateGraph(GraphState)
         
         # Define workflow nodes
-        workflow.add_node("input_processor", self.input_processor)
-        workflow.add_node("retrieval", self.retrieval)
-        workflow.add_node("llm_response", self.llm_response)
-        workflow.add_node("output_processor", self.output_processor)
+        workflow.add_node("input_processor", input_processor)
+        workflow.add_node("retrieval", retrieval)
+        workflow.add_node("llm_response", llm_response)
+        workflow.add_node("output_processor", output_processor)
         
         # Connect the nodes
         workflow.set_entry_point("input_processor")
@@ -123,91 +128,7 @@ class LangGraphService:
         # Return final state
         return result
     
-    async def input_processor(self, state: Dict[str, Any]) -> Dict[str, Any]:
-        """Process user input"""
-        # Extract the latest user message
-        latest_message = state["messages"][-1].content
-        state["user_query"] = latest_message
-        return state
     
-    async def retrieval(self, state: Dict[str, Any]) -> Dict[str, Any]:
-        """Retrieve relevant documents"""
-        query = state["user_query"]
-        
-        try:
-            # Search the vector database
-            docs = await self.vector_db.search(
-                query=query,
-                collection_name="default",
-                k=5
-            )
-            
-            # Store the retrieved documents
-            state["docs"] = docs
-            state["sources"] = [
-                doc.metadata.get("source", "unknown")
-                for doc in docs
-            ]
-            
-            # Format document context for the LLM
-            context = "\n\n".join([
-                f"Document {i+1}:\n{doc.page_content}"
-                for i, doc in enumerate(docs)
-            ])
-            
-            state["context"] = context
-            
-        except Exception as e:
-            logging.error(f"Error in retrieval: {e}")
-            state["context"] = "No relevant information found."
-            state["docs"] = []
-            state["sources"] = []
-            
-        return state
     
-    async def llm_response(self, state: Dict[str, Any]) -> Dict[str, Any]:
-        """Generate response using LLM"""
-        messages = state["messages"]
-        context = state["context"]
-        
-        # Create the prompt
-        prompt = ChatPromptTemplate.from_messages([
-            ("system", """You are a helpful AI assistant. Use the following context to answer the question. 
-If you don't know the answer based on the context, just say so - don't make things up.
+    
 
-Context: {context}"""),
-            *[(msg.type, msg.content) for msg in messages]
-        ])
-        
-        # Create the chain
-        chain = prompt | self.llm | StrOutputParser()
-        
-        # Generate the response
-        try:
-            response = await chain.ainvoke({
-                "context": context
-            })
-            state["response"] = response
-        except Exception as e:
-            logging.error(f"Error generating LLM response: {e}")
-            state["response"] = "I'm sorry, I encountered an error while processing your request."
-        
-        return state
-    
-    async def output_processor(self, state: Dict[str, Any]) -> Dict[str, Any]:
-        """Process the output and prepare final response"""
-        # Add the AI response to messages
-        state["messages"].append(AIMessage(content=state["response"]))
-        
-        # Extract source information
-        sources = []
-        if "sources" in state and state["sources"]:
-            sources = [s for s in state["sources"] if s != "unknown"]
-        
-        state["final_response"] = {
-            "response": state["response"],
-            "sources": sources,
-            "session_data": state.get("session_data", {})
-        }
-        
-        return state

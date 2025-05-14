@@ -11,7 +11,7 @@ passlib[bcrypt]
 
 # Core LangChain components
 langchain
-langchain-google-generative-ai
+# langchain-google-generative-ai
 langchain-core
 langchain-community
 

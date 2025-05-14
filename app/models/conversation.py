@@ -75,3 +75,16 @@ class ChatResponse(BaseModel):
     response: str
     sources: List[str] = []
     session_data: Dict[str, Any] = {}
+
+
+class GuestChatRequest(BaseModel):
+    conversation_id: str
+    # bot_id: str
+    # tenant_id: str
+    message: str
+    
+class GuestChatResponse(BaseModel):
+    conversation_id: str
+    response: str
+    sources: List[str] = []
+    session_data: Dict[str, Any] = {}
