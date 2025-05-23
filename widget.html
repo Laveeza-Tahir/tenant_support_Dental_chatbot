@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test DentalBot</title>
+</head>
+<body>
+  <h1>Welcome to My Site</h1>
+  <p>This is where your chatbot will appear.</p>
+
+  <!-- Paste your widget_code content below this line -->
+
+  <!-- Dental Chatbot Widget -->
+  <link rel="stylesheet" href="http://localhost:8000/static/css/style.css">
+  <script>
+      (function() {
+          const chatbotSettings = {
+              "theme": "light",
+              "primary_color": "#060dcf",
+              "secondary_color": "#e3e7ee",
+              "chatbot_name": "DentalBot",
+              "welcome_message": "Welcome to DentalBot! How can I assist you today?",
+              "bot_avatar": "/static/img/bot.png",
+              "user_avatar": "/static/img/userAvatar.jpg",
+              "widget_width": "350px",
+              "widget_height": "500px",
+              "position": "right",
+              "show_timestamp": true,
+              "enable_voice": false,
+              "enable_attachments": false,
+              "apiEndpoint": "/api/chat",
+              "baseUrl": "http://localhost:8000",
+              "userId": "test@example.com",
+              "authenticated": true
+          };
+          const script = document.createElement('script');
+          script.src = 'http://localhost:8000/static/js/chat-widget.js';
+          script.onload = function() {
+              window.initializeChatWidget(chatbotSettings);
+          };
+          document.head.appendChild(script);
+      })();
+  </script>
+
+  <!-- Paste above this line -->
+
+</body>
+</html>

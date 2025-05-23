@@ -57,7 +57,7 @@ class AppointmentNode:
             if calendly_link:
                 state["final_response"] = (
                     " You're all set to book an appointment!"
-                    f" Click here to schedule a time({calendly_link})"
+                    f" ({calendly_link})"
                     " After booking, you'll automatically receive a confirmation email from Calendly."
                 )
             else:

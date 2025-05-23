@@ -15,8 +15,8 @@ def detect_intent(text: str) -> str:
     # Define a set of keywords for each intent
     handoff_keywords = ["live", "human", "whatsapp", "agent", "humman", "talk to human", "connect to human"]
     appointment_keywords = ["book", "appointment", "schedule", "visit", "dentist", "checkup"]
-    faq_keywords = ["faq", "what is", "how", "why", "?"]
-    intake_keywords = ["name", "age", "history", "intake", "patient info"]
+    faq_keywords = ["faq", "what is", "how", "why", "?", "tell me about", "explain", "information", "details", "guide", "help"]
+    # intake_keywords = ["name", "age", "history", "intake", "patient info"]
     contact_keywords = ["contact", "address", "hours", "timing", "location", "reach us"]
 
     # Check for intent match using fuzzy matching for "handoff" and other intents
@@ -29,8 +29,8 @@ def detect_intent(text: str) -> str:
     if any(is_similar(word, kw) for word in t.split() for kw in faq_keywords):
         return "faqs"
     
-    if any(is_similar(word, kw) for word in t.split() for kw in intake_keywords):
-        return "intake"
+    # if any(is_similar(word, kw) for word in t.split() for kw in intake_keywords):
+    #     return "intake"
     
     if any(is_similar(word, kw) for word in t.split() for kw in contact_keywords):
         return "contact_info"

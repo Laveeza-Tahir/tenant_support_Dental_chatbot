@@ -8,7 +8,10 @@ langchain
 langchain-google-generative-ai
 langchain-core
 
-openai
-faiss-cpu
+chromadb
+sentence-transformers
 
 langgraph
+
+scikit-learn
+numpy

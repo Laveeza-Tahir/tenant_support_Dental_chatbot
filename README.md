@@ -1,14 +1,13 @@
-
 # Dental Chatbot - Gemini
 
-An intelligent dental FAQ chatbot powered by retrieval-augmented generation (RAG), FastAPI, FAISS, and Gemini Pro (Google Generative AI). This bot classifies user queries and retrieves relevant answers from a dental FAQs dataset using semantic search.
+An intelligent dental FAQ chatbot powered by retrieval-augmented generation (RAG), FastAPI, ChromaDB, and Gemini Pro (Google Generative AI). This bot classifies user queries and retrieves relevant answers from each dental clinic's FAQ documents using semantic search.
 
 ---
 
 ##  Features
 
 -  Natural language query handling with Google Gemini
--  Vector similarity search using FAISS
+-  Vector similarity search using ChromaDB for per-clinic document storage
 -  Modular architecture for retrievers, workflows, and APIs
 -  Configurable via `.env` and `settings.py`
 -  Built-in classification and retrieval logic
@@ -43,16 +42,6 @@ GEMINI_API_KEY=your_google_gemini_api_key
 
 ---
 
-##  Build FAISS Index
-
-If not already built:
-
-```bash
-python scripts/build_faiss.py
-```
-
----
-
 ##  Run the Server
 
 ```bash
@@ -76,12 +65,11 @@ Then visit: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ##  Key Modules
 
-- **Retrievers**: Semantic search via FAISS or MongoDB.
-- **Workflows**: Modular nodes like input, classify, faq retrieval, output.
-- **Models**: Sessions, questions, responses defined via Pydantic.
+- **Retrievers**: Semantic search via ChromaDB for per-clinic document storage and retrieval
+- **Workflows**: Modular nodes like input, classify, faq retrieval, output
+- **Models**: Sessions, questions, responses defined via Pydantic
 
 ---
-
 
 ## 📜 License
 
@@ -92,5 +80,3 @@ MIT © 2025 - Jamal Mustafa
 ## 🤝 Contributing
 
 Pull requests welcome. Let's improve dental query automation together!
-
-EOL

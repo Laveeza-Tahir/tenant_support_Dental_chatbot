@@ -1,12 +1,13 @@
 from pydantic_settings import BaseSettings
+import os
 
 class Settings(BaseSettings):
     # Mongo
     mongo_uri: str
     mongo_db: str = "dental_chatbot"
 
-    # FAISS
-    faiss_index_path: str = "data/faiss_index"
+    # ChromaDB
+    chroma_db_path: str = os.path.join(os.path.dirname(os.path.dirname(__file__)), "chroma_db")
 
     # LLM keys
     google_api_key: str
