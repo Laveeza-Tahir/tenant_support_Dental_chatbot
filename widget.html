@@ -11,7 +11,7 @@
   <!-- Paste your widget_code content below this line -->
 
   <!-- Dental Chatbot Widget -->
-  <link rel="stylesheet" href="http://localhost:8000/static/css/style.css">
+  <link rel="stylesheet" href="http://192.168.1.25:8000/static/css/style.css">
   <script>
       (function() {
           const chatbotSettings = {
@@ -29,12 +29,12 @@
               "enable_voice": false,
               "enable_attachments": false,
               "apiEndpoint": "/api/chat",
-              "baseUrl": "http://localhost:8000",
+              "baseUrl": "http://192.168.1.25:8000",
               "userId": "test@example.com",
               "authenticated": true
           };
           const script = document.createElement('script');
-          script.src = 'http://localhost:8000/static/js/chat-widget.js';
+          script.src = 'http://192.168.1.25:8000/static/js/chat-widget.js';
           script.onload = function() {
               window.initializeChatWidget(chatbotSettings);
           };

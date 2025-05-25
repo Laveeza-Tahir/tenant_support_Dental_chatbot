@@ -1,1 +1,1 @@
-{"theme": "light", "primary_color": "#000000", "secondary_color": "#FFFFFF", "chatbot_name": "DentalBot", "welcome_message": "Welcome to DentalBot! How can I assist you today?"}
+{"theme": "light", "primary_color": "#060dcf", "secondary_color": "#e3e7ee", "chatbot_name": "", "welcome_message": "Welcome! How can I assist you today?", "bot_avatar": "/static/img/botAvatar.png", "user_avatar": "/static/img/userAvatar.jpg", "widget_width": "350px", "widget_height": "500px", "position": "right", "show_timestamp": true, "enable_voice": false, "enable_attachments": false}

@@ -22,8 +22,7 @@ class FAQNode:
             Instructions:
             1. Use ONLY information from the provided documents to answer.
             2. Respond in **at most 2-3 sentences**.
-            3. If the question cannot be answered using the provided context, clearly state that you don't have that specific information.
-            4. Focus on dental-related information only.
+            3. Focus on health-related information only.
             """)
 
     async def __call__(self, state: state) -> state:
@@ -31,7 +30,7 @@ class FAQNode:
         user_id = state.get("user_id")
         
         if not user_id:
-            state["final_response"] = "I apologize, but I need your user ID to access your dental clinic's specific information. Please try again or contact support."
+            state["final_response"] = "I apologize, but I need your user ID to access your clinic's specific information. Please try again or contact support."
             return state
             
         try:
@@ -40,7 +39,7 @@ class FAQNode:
             print(f"Retrieved {len(docs)} documents from ChromaDB for user {user_id}")
             
             if not docs:
-                state["final_response"] = "I don't have any relevant information from your dental clinic's documents to answer that question. Please contact your dental office directly for specific information."
+                state["final_response"] = "I don't have any relevant information from your clinic's documents to answer that question. Please contact your dental office directly for specific information."
                 return state
             
             # Format context with source attribution
